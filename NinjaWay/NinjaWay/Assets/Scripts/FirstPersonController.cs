@@ -101,7 +101,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     Debug.Log("dfghd");
                     //ribi.velocity = Vector3.zero;
                     //ribi.velocity =  -hoppanma * Vector3.up;
-                    transform.position += -transform.up *0.5f;
+                    transform.position += transform.up *0.5f;
                 }
 
                 if (sag == true)
