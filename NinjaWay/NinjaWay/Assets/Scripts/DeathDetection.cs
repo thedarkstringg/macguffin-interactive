@@ -10,11 +10,16 @@ namespace UnityStandardAssets.Characters.FirstPerson
 		public AudioClip deathSound;
 		private AudioSource audioSource;
 
+        public GameObject deathPanel;
+
         void OnControllerColliderHit(ControllerColliderHit hit) {
             if (hit.gameObject.tag.Equals("KillZone") && !fpc.isDead)
             {
+                
                 deathText.SetActive(true);
                 Time.timeScale = 0f;
+                deathPanel.SetActive(true);
+                deathPanel.SetActive(true);
                 if (!fpc.jumpCommand.Equals("")) {
                     fpc.jumpCommand = "";
                 }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
@@ -16,6 +16,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
         public GameObject deathText;
         private bool gameStarted = false;
         public bool isDead = false;
+
+        bool sol;
+        bool sag;
+        
 
         [SerializeField] private bool m_IsWalking;
         [SerializeField] private float m_WalkSpeed;
@@ -35,6 +39,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
         [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
 
+     
+
         private Camera m_Camera;
         private bool m_Jump;
         private float m_YRotation;
@@ -47,6 +53,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
+        Rigidbody ribi;
+        float hoppanma = 5.0f;
 
         // Use this for initialization
         private void Start()
@@ -68,6 +76,45 @@ namespace UnityStandardAssets.Characters.FirstPerson
         // Update is called once per frame
         private void Update()
         {
+
+            if (Input.touchCount > 0)
+            {
+                Touch barmaq = Input.GetTouch(0);
+
+                Vector3 sag_get = new Vector3(transform.position.x, transform.position.y, -3f);
+                Vector3 sol_get = new Vector3(transform.position.x, transform.position.y, 3f);
+
+                if (barmaq.deltaPosition.x > 50.0f)
+                {
+                    sag = true;
+                    sol = false;
+                }
+
+                if (barmaq.deltaPosition.x < -50.0f)
+                {
+                    sol = true;
+                    sag = false;
+                }
+                Debug.Log(barmaq.deltaPosition.y);
+                if (barmaq.deltaPosition.y >50.0f)
+                {
+                    Debug.Log("dfghd");
+                    //ribi.velocity = Vector3.zero;
+                    //ribi.velocity =  -hoppanma * Vector3.up;
+                    transform.position += -transform.up *0.5f;
+                }
+
+                if (sag == true)
+                {
+                    transform.position = Vector3.Lerp(transform.position, sag_get, 5 * Time.deltaTime);
+                }
+
+                if (sol == true)
+                {
+                    transform.position = Vector3.Lerp(transform.position, sol_get, 5 * Time.deltaTime);
+                }
+            }
+
             // the jump state needs to read here to make sure it is not missed
             if (!m_Jump)
             {
@@ -77,7 +124,18 @@ namespace UnityStandardAssets.Characters.FirstPerson
 					m_Jump = CrossPlatformInputManager.GetButtonDown ("Jump");
 				}
             }
-            if (m_Jump && !gameStarted)
+
+            if (!gameStarted)
+            {
+                if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
+                {
+                    gameStarted = true;
+                    startText.SetActive(false);
+                }
+            }
+
+
+            if (Input.GetKeyDown(KeyCode.A) && !gameStarted)
             {
                 gameStarted = true;
                 startText.SetActive(false);
@@ -109,6 +167,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
         }
 
+        
 
         private void PlayLandingSound()
         {

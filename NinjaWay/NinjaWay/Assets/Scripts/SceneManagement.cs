@@ -8,7 +8,9 @@ public class SceneManagement : MonoBehaviour
     public GameObject optionsPanel;
     public void PlayGame()
    {
+        
         SceneManager.LoadSceneAsync("Main Level");
+        Time.timeScale = 1f;
     }
     public void ExitGame()
     {
@@ -19,12 +21,14 @@ public class SceneManagement : MonoBehaviour
     {
         optionsPanel.gameObject.SetActive(true);
     }
-    private void Update()
+    public void Update()
     {
         if(Input.GetKeyDown(KeyCode.L))
         {
           SceneManager.LoadScene("Main Level");
           Time.timeScale = 1f;
         }
+
+        
     }
 }
